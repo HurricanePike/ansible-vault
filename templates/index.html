@@ -1,0 +1,88 @@
+<body>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            max-width: 400px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"], textarea {
+            width: 380%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #b4b4b4;
+            border-radius: 3px;
+            box-sizing: border-box; /* Убедимся, что padding не влияет на ширину */
+        }
+        button {
+            cursor: pointer;
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 3px;
+            margin-right: 5px; /* небольшой отступ между кнопками */
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <h1>Ansible-Vault Tool</h1>
+
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" placeholder="Введите ваш пароль" value="{% if result %}{{ input_password }}{% endif %}">
+
+    <label for="textToEncrypt">Текст:</label>
+    <textarea id="result" rows="10" placeholder="Введите текст">{% if result %}{{ result }}{% endif %}</textarea>
+
+    <button id="encryptButton">Encrypt</button>
+    <button id="decryptButton">Decrypt</button>
+
+
+    <script>
+        document.getElementById('decryptButton').onclick = function() {
+            const password = document.getElementById('password').value;
+            const text = document.getElementById('result').value;
+
+            fetch('/decrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text, password: password })
+            })
+            .then(response => response.text())
+               .then(data => {
+                   document.getElementById('result').value = data;
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+               });
+        }
+        document.getElementById('encryptButton').onclick = function() {
+            const password = document.getElementById('password').value;
+            const text = document.getElementById('result').value;
+
+            fetch('/encrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text, password: password })
+            })
+            .then(response => response.text())
+               .then(data => {
+                   document.getElementById('result').value = data;
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+               });
+        }
+    </script>
+</body>
+</html>

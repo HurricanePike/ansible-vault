@@ -1,0 +1,53 @@
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Execute Python Script</title>
+   </head>
+   <body>
+       <h1>Run a Python Script</h1>
+       <textarea id="input-text" rows="10" cols="30"></textarea><br>
+       <button id="run-btn">Run Script</button>
+       <pre id="output"></pre>
+
+       <script>
+           document.getElementById('run-btn').addEventListener('click', function() {
+               const text = document.getElementById('input-text').value;
+
+               fetch('/run-script', {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json'
+                   },
+                   body: JSON.stringify({ text: text })
+               })
+               .then(response => response.text())
+               .then(data => {
+                   document.getElementById('output').innerText = data;
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+               });
+           });
+       </script>
+   </body>
+   </html>
+
+
+
+
+
+   <body>
+    <h1>Run a Python Script</h1>
+    <form method="POST" action="/run-script">
+        <textarea name="input_text" rows="10" cols="30" placeholder="Введите текст">{% if result %}{{ result }}{% endif %}</textarea><br>
+        <input type="password" name="input_password" placeholder="Введите пароль" value="{% if result %}{{ input_password }}{% endif %}"><br>
+        <button type="submit">Run Script</button>
+    </form>
+
+
+
+
+
+
